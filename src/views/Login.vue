@@ -51,9 +51,8 @@
         this.$store.dispatch("bing");
       },
       check() {
-        console.log("this is token from local storage : " + localStorage.getItem('token'))
         console.log("this is token from store : " + this.$store.state.token)
-        console.log("this is user from store : " + this.$store.state.user.body)
+        console.log(JSON.stringify(this.$store.state.user))
       }
     }
   };

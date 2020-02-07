@@ -7,7 +7,7 @@ import router from './routers'
 
 Vue.prototype.$http = Axios
 
-const token = localStorage.getItem('token')
+const token = store.state.token
 
 Vue.config.productionTip = false;
 

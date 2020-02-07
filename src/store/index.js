@@ -8,7 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     status : "",
-    token : localStorage.getItem("token") || "no token",
+    token : "",
     user : {},
     message : ""
   },
@@ -19,13 +19,15 @@ export default new Vuex.Store({
     auth_error(state) {
       state.status = 'error'
     },
-    auth_success(state , token) {
+    auth_success(state , {token, user}) {
       state.status = 'successs';
       state.token = token;
+      state.user = user
     },
     logout(state) {
       state.status = ''
-      state.token = ''
+      state.token = ""
+      state.user = {}
     },
     bing(state,msg) {
       state.message = msg
@@ -39,14 +41,18 @@ export default new Vuex.Store({
         commit('auth_request')
         axios({ url: 'http://127.0.0.1:5000/mobile/login', data : {username:username,password:password}, method : 'POST' })
         .then(resp => {
-          const token = resp.data.token
-          localStorage.setItem('token', token)
-          commit('auth_success', token)
+          const payload = {
+            token : resp.data.token,
+            user : {
+              username : username,
+              password : password
+            }
+          }
+          commit('auth_success', payload);
         })
     },
     logout({commit}) {
         commit('logout')
-        localStorage.removeItem('token')
         delete axios.defaults.headers.common['Authorization']
     },
     bing({commit}) {
